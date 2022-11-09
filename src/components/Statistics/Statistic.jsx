@@ -18,6 +18,6 @@ Statistic.propTypes = {
   good: PropTypes.number.isRequired,
   neutral: PropTypes.number.isRequired,
   bad: PropTypes.number.isRequired,
-  gototalod: PropTypes.number.isRequired,
+  total: PropTypes.number.isRequired,
   positive:PropTypes.number.isRequired,
 }

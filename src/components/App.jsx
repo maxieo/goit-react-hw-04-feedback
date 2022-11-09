@@ -1,42 +1,38 @@
-import { Component } from "react";
+import { useState } from "react";
 import { Feedback } from "./Feedback/Feedback.jsx";
 import { Section } from "./Sections/Section.jsx";
 import { Statistic } from "./Statistics/Statistic.jsx";
 import { Notification } from "./Statistics/Notification.jsx";
 
-class App extends Component {
-  state = {
+function App () {
+  const [state, setState] = useState({
     good: 0,
     neutral: 0,
     bad: 0,
+  })
+
+  const onLeaveFeedback = (option) => { 
+    setState(prevState => ({...prevState, [option]: prevState[option] +1 }))
   }
 
-  onLeaveFeedback = e => { 
-    this.setState(prevState => ({
-      [e.target.name]: prevState[e.target.name] + 1 
-    }))
+  const totalFeedback = () => { 
+    return Object.values (state).reduce ((accum, item)=> accum + item, 0)
   }
 
-  totalFeedback = () => { 
-    return Object.values (this.state).reduce ((accum, item)=> accum + item, 0)
-  }
-
-  positiveFeedbackPrecentage = () => { 
+  const positiveFeedbackPrecentage = () => { 
     return Number(
-      Math.round ((this.state.good / this.totalFeedback())*100)
+      Math.round ((state.good / totalFeedback())*100)
     )
   }
 
-  render() { 
-    const { good, neutral, bad } = this.state
-    const total = this.totalFeedback()
-    const positive = this.positiveFeedbackPrecentage()
+    const total = totalFeedback()
+    const positive = positiveFeedbackPrecentage()
     return (
       <div className = 'feedback'>
         <Section title="Please leave your feedback">
           <Feedback
-            options={this.state}
-            onLeaveFeedback={this.onLeaveFeedback}
+            options={state}
+            onLeaveFeedback={onLeaveFeedback}
             
           />
         </Section>
@@ -44,9 +40,9 @@ class App extends Component {
         <Section title="Statistic">
           {total ? (
             <Statistic
-            good={good}
-            neutral={neutral}
-            bad={bad}
+            good={state.good}
+            neutral={state.neutral}
+            bad={state.bad}
             total={total}
             positive={positive}
           />
@@ -55,7 +51,7 @@ class App extends Component {
           }
         </Section>
       </div>
-  )}
+  )
 };
 
 
